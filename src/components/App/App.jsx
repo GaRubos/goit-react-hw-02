@@ -6,11 +6,7 @@ import Feedback from "../Feedback/Feedback";
 
 import Options from "../Options/Options";
 
-// const feedbackState = {
-//   good: 0,
-//   neutral: 0,
-//   bad: 0,
-// };
+import Notification from "../Notification/Notification";
 
 const App = () => {
   const [feedbacks, setFeedbacks] = useState({ good: 0, neutral: 0, bad: 0 });
@@ -23,6 +19,8 @@ const App = () => {
     }));
   };
 
+  const totalFeedback = feedbacks.good + feedbacks.neutral + feedbacks.bad;
+
   return (
     <>
       <Description
@@ -32,7 +30,11 @@ const App = () => {
         }
       />
       <Options updateFeedback={updateFeedback} />
-      <Feedback {...feedbacks} />
+      {totalFeedback > 0 ? (
+        <Feedback {...feedbacks} totalFeedback={totalFeedback} />
+      ) : (
+        <Notification message="No feedback given yet." />
+      )}
     </>
   );
 };
