@@ -20,6 +20,7 @@ const App = () => {
   };
 
   const totalFeedback = feedbacks.good + feedbacks.neutral + feedbacks.bad;
+  const avgFeedback = Math.round((feedbacks.good / totalFeedback) * 100);
 
   return (
     <>
@@ -35,7 +36,11 @@ const App = () => {
         totalFeedback={totalFeedback}
       />
       {totalFeedback > 0 ? (
-        <Feedback {...feedbacks} totalFeedback={totalFeedback} />
+        <Feedback
+          {...feedbacks}
+          totalFeedback={totalFeedback}
+          avgFeedback={avgFeedback}
+        />
       ) : (
         <Notification message="No feedback given yet." />
       )}
