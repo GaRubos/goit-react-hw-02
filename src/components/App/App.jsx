@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Description from "../Description/Description";
 import Feedback from "../Feedback/Feedback";
@@ -6,7 +6,16 @@ import Options from "../Options/Options";
 import Notification from "../Notification/Notification";
 
 const App = () => {
-  const [feedbacks, setFeedbacks] = useState({ good: 0, neutral: 0, bad: 0 });
+  const [feedbacks, setFeedbacks] = useState(() => {
+    const savedFeedbacks = localStorage.getItem("feedbacks");
+    return savedFeedbacks
+      ? JSON.parse(savedFeedbacks)
+      : { good: 0, neutral: 0, bad: 0 };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+  }, [feedbacks]);
 
   const updateFeedback = (feedbackType) => {
     setFeedbacks((prevFeedback) => ({
@@ -20,7 +29,8 @@ const App = () => {
   };
 
   const totalFeedback = feedbacks.good + feedbacks.neutral + feedbacks.bad;
-  const avgFeedback = Math.round((feedbacks.good / totalFeedback) * 100);
+  const avgFeedback =
+    totalFeedback > 0 ? Math.round((feedbacks.good / totalFeedback) * 100) : 0;
 
   return (
     <>
